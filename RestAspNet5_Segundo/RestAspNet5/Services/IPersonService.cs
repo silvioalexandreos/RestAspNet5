@@ -7,7 +7,7 @@ namespace RestAspNet5.Services
     {
         Person Created(Person person);
         Person FindById(long id);
-        List<Person> ListAll();
+        List<Person> FindAll();
         Person Update(Person person);
         void Delete(long id);
     }

@@ -33,7 +33,7 @@ namespace RestAspNet5.Services.Implementations
             };
         }
 
-        public List<Person> ListAll()
+        public List<Person> FindAll()
         {
             List<Person> persons = new List<Person>();
             for (int i = 0; i < 8; i++)
