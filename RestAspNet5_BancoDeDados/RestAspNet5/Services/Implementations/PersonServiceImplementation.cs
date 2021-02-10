@@ -1,4 +1,5 @@
 ﻿using RestAspNet5.Model;
+using RestAspNet5.Model.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,13 @@ namespace RestAspNet5.Services.Implementations
 {
     public class PersonServiceImplementation : IPersonService
     {
-        private volatile int count;
+
+        private readonly MySqlContext _context;
+
+        public PersonServiceImplementation(MySqlContext context)
+        {
+            _context = context;
+        }
 
         public Person Created(Person person)
         {
@@ -25,7 +32,7 @@ namespace RestAspNet5.Services.Implementations
         {
             return new Person
             {
-                Id = IncrementAndGet(),
+                Id = 1,
                 FirstName = "Silvio",
                 LastName = "Alexandre",
                 Address = "Cocalzinho de Goiás - Goiás",
@@ -35,35 +42,12 @@ namespace RestAspNet5.Services.Implementations
 
         public List<Person> FindAll()
         {
-            List<Person> persons = new List<Person>();
-            for (int i = 0; i < 8; i++)
-            {
-                Person person = MockPerson(i);
-                persons.Add(person);
-            }
-            return persons;
+            return _context.Persons.ToList();
         }
 
         public Person Update(Person person)
         {
             return person;
-        }
-
-        private Person MockPerson(int i)
-        {
-            return new Person
-            {
-                Id = IncrementAndGet(),
-                FirstName = "Person FirstName" + i,
-                LastName = "Person LastName" + i,
-                Address = "Brasil" + i,
-                Gender = "Masculino"
-            };
-        }
-
-        private long IncrementAndGet()
-        {
-            return Interlocked.Increment(ref count);
         }
     }
 }
