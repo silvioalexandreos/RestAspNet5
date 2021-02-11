@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RestAspNet5.Model;
 using RestAspNet5.Services;
 
-namespace RestAspNet5.Controllers
+namespace RestAspNet5.Controllers.V1.Persons
 {
+    
     [ApiController]
-    [Route("api/[controller]")]
-    public class PersonController : ControllerBase
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    public class PersonsController : ControllerBase
     {
-        private readonly ILogger<PersonController> _logger;
+        private readonly ILogger<PersonsController> _logger;
         private IPersonService _personService;
 
-        public PersonController(ILogger<PersonController> logger, IPersonService personService)
+        public PersonsController(ILogger<PersonsController> logger, IPersonService personService)
         {
             _logger = logger;
             _personService = personService;
