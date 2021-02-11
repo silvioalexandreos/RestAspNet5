@@ -18,36 +18,79 @@ namespace RestAspNet5.Services.Implementations
             _context = context;
         }
 
-        public Person Created(Person person)
-        {
-            return person;
-        }
-
-        public void Delete(long id)
-        {
-            
-        }
-
-        public Person FindById(long id)
-        {
-            return new Person
-            {
-                Id = 1,
-                FirstName = "Silvio",
-                LastName = "Alexandre",
-                Address = "Cocalzinho de Goiás - Goiás",
-                Gender = "Masculino"
-            };
-        }
-
         public List<Person> FindAll()
         {
             return _context.Persons.ToList();
         }
 
+        public Person FindById(long id)
+        {
+            return _context.Persons.SingleOrDefault(x => x.Id.Equals(id));
+        }
+
+        public Person Created(Person person)
+        {
+            try
+            {
+                _context.Add(person);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Não foi possível salvar o Person", ex);
+            }
+
+            return person;
+        }
+
         public Person Update(Person person)
         {
+            if (!Existe(person.Id)) return new Person();
+
+            var result = _context.Persons.SingleOrDefault(x => x.Id.Equals(person.Id));
+
+            if (result != null)
+            {
+                try
+                {
+
+                    //ler sobre esse comando.
+                    _context.Entry(result).CurrentValues.SetValues(person);
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                    throw new Exception("Não possível atualizar", ex);
+                }
+            }
             return person;
+        }
+
+        
+
+        public void Delete(long id)
+        {
+            var result = _context.Persons.SingleOrDefault(x => x.Id.Equals(id));
+
+            if (result != null)
+            {
+                try
+                {
+                    _context.Persons.Remove(result);
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+        }
+
+        private bool Existe(long id)
+        {
+            return _context.Persons.Any(x => x.Id.Equals(id));
         }
     }
 }
