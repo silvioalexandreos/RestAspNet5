@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using RestAspNet5.Business;
 using RestAspNet5.Business.Implementations;
@@ -31,7 +32,7 @@ namespace RestAspNet5
                 .CreateLogger();
         }
 
-        
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -50,6 +51,16 @@ namespace RestAspNet5
             {
                 MigrateDatabase(connection);
             }
+
+            services.AddMvc(options =>
+            {
+                options.RespectBrowserAcceptHeader = true;
+
+                options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
+                options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
+
+            })
+                .AddXmlSerializerFormatters();
 
             services.AddApiVersioning();
 
@@ -88,7 +99,7 @@ namespace RestAspNet5
                 var evolveConnection = new MySql.Data.MySqlClient.MySqlConnection(connection);
                 var evolve = new Evolve.Evolve(evolveConnection, msg => Log.Information(msg))
                 {
-                    Locations = new List<string> {"db/migrations", "db/dataset" },
+                    Locations = new List<string> { "db/migrations", "db/dataset" },
                     IsEraseDisabled = true,
                 };
                 evolve.Migrate();
