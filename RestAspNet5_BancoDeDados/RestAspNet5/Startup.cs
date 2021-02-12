@@ -8,8 +8,7 @@ using Microsoft.OpenApi.Models;
 using RestAspNet5.Business;
 using RestAspNet5.Business.Implementations;
 using RestAspNet5.Model.Context;
-using RestAspNet5.Repository;
-using RestAspNet5.Repository.Implementations;
+using RestAspNet5.Repository.Generic;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -55,9 +54,8 @@ namespace RestAspNet5
             services.AddApiVersioning();
 
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
-            services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
             services.AddScoped<IBookBusiness, BookBusinessImplementation>();
-            services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
         }
 

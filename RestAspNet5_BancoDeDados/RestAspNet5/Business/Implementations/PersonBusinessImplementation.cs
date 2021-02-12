@@ -1,6 +1,7 @@
 ﻿using RestAspNet5.Model;
 using RestAspNet5.Model.Context;
 using RestAspNet5.Repository;
+using RestAspNet5.Repository.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace RestAspNet5.Business.Implementations
     public class PersonBusinessImplementation : IPersonBusiness
     {
 
-        private readonly IPersonRepository _repository;
+        private readonly IRepository<Person> _repository;
 
-        public PersonBusinessImplementation(IPersonRepository repository)
+        public PersonBusinessImplementation(IRepository<Person> repository)
         {
             _repository = repository;
         }
