@@ -1,4 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
+using RestAspNet5.Data.Converter.Implementations;
+using RestAspNet5.Data.VO;
 using RestAspNet5.Model;
 using RestAspNet5.Repository;
 using RestAspNet5.Repository.Generic;
@@ -12,30 +14,37 @@ namespace RestAspNet5.Business.Implementations
     public class BookBusinessImplementation : IBookBusiness
     {
         private readonly IRepository<Book> _repository;
+        private readonly BookConverter _converter;
 
         public BookBusinessImplementation(IRepository<Book> repository)
         {
             _repository = repository;
+            _converter = new BookConverter();
         }
 
-        public Book Created(Book book)
+        public BookVO Created(BookVO book)
         {
-            return _repository.Created(book);
+            var parseBook = _converter.Parse(book);
+            parseBook = _repository.Created(parseBook);
+            return _converter.Parse(parseBook);
+
         }
 
-        public List<Book> FindAll()
+        public List<BookVO> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
-        public Book FindById(long id)
+        public BookVO FindById(long id)
         {
-            return _repository.FindById(id);
+            return _converter.Parse( _repository.FindById(id));
         }
 
-        public Book Update(Book book)
+        public BookVO Update(BookVO book)
         {
-            return _repository.Update(book);
+            var parseBook = _converter.Parse(book);
+            parseBook = _repository.Update(parseBook);
+            return _converter.Parse(parseBook);
         }
 
         public void Delete(long id)

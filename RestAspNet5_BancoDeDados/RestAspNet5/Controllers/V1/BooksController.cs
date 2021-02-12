@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RestAspNet5.Business;
+using RestAspNet5.Data.VO;
 using RestAspNet5.Model;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace RestAspNet5.Controllers.V1
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Book book)
+        public IActionResult Post([FromBody] BookVO book)
         {
 
             if (book == null) return BadRequest();
@@ -49,7 +50,7 @@ namespace RestAspNet5.Controllers.V1
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromBody] Book book)
+        public IActionResult Put([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
 
